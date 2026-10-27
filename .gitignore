@@ -1,0 +1,5 @@
+result
+result-*
+tofu/.terraform/
+tofu/inventory.auto.tfvars.json
+tofu/terraform.tfstate*
