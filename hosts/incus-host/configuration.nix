@@ -47,7 +47,12 @@
   };
 
   systemd.network.networks."10-uplink" = {
-    matchConfig.Name = "ens18";
+    # The cloud-init template boots with eth0; this configuration renames it to
+    # ens18 after the first reboot.
+    matchConfig.Name = [
+      "en*"
+      "eth*"
+    ];
     DHCP = "ipv4";
   };
 
