@@ -25,14 +25,10 @@ in
       # Incus proxy devices listen on the host for each published guest port.
       allowedTCPPorts = publishedPorts "tcp";
       allowedUDPPorts = publishedPorts "udp";
-      # Guests use the bridge's dnsmasq for DHCP and DNS.
-      interfaces.incusbr0 = {
-        allowedTCPPorts = [ 53 ];
-        allowedUDPPorts = [
-          53
-          67
-        ];
-      };
+      # Guests use the bridge's dnsmasq for DHCP and DNS. Their DHCP broadcasts
+      # reach the input chain with conntrack state "invalid" after the Incus
+      # bridge filter, so the bridge must be accepted before the state check.
+      trustedInterfaces = [ "incusbr0" ];
     };
   };
 
