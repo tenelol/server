@@ -65,9 +65,10 @@ resource "incus_instance" "guest" {
       type = "disk"
 
       properties = {
-        source = device.value.source
-        path   = device.value.path
-        shift  = "true"
+        source   = device.value.source
+        path     = device.value.path
+        readonly = tostring(device.value.readonly)
+        shift    = "true"
       }
     }
   }

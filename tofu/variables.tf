@@ -21,8 +21,9 @@ variable "guests" {
       port     = number
     }))
     disks = map(object({
-      source = string
-      path   = string
+      source   = string
+      path     = string
+      readonly = optional(bool, false)
     }))
   }))
 

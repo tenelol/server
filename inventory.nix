@@ -22,39 +22,58 @@
       ];
     };
 
-    # Created only after the data HDD is attached to the host and mounted at
-    # /srv/nas-data. DLNA discovery (SSDP multicast) does not reach the guest.
-    nas = {
+    # immich and nas stay disabled until the data HDD is mounted on the host at
+    # /srv/nas-data with the immich, photos and share directories created.
+
+    # Photo originals live in /srv/nas-data/photos, shared by Samba and read
+    # by Immich as an external library. The mount points match the previous
+    # Docker deployment, so database paths stay valid.
+    immich = {
       enable = false;
-      ipv4 = "10.40.0.12";
-      cpus = 2;
-      memory = "2GiB";
+      ipv4 = "10.40.0.11";
+      cpus = 4;
+      memory = "3GiB";
       diskSize = "16GiB";
       ports = [
         {
           protocol = "tcp";
-          port = 5001;
-        }
-        {
-          protocol = "tcp";
-          port = 8080;
-        }
-        {
-          protocol = "tcp";
-          port = 8081;
-        }
-        {
-          protocol = "tcp";
-          port = 9001;
-        }
-        {
-          protocol = "tcp";
-          port = 9002;
+          port = 2283;
         }
       ];
-      disks.nas-data = {
-        source = "/srv/nas-data";
-        path = "/srv/nas-data";
+      disks = {
+        immich-data = {
+          source = "/srv/nas-data/immich";
+          path = "/data";
+        };
+        photos = {
+          source = "/srv/nas-data/photos";
+          path = "/external";
+          readonly = true;
+        };
+      };
+    };
+
+    nas = {
+      enable = false;
+      ipv4 = "10.40.0.12";
+      cpus = 1;
+      memory = "512MiB";
+      diskSize = "8GiB";
+      ports = [
+        {
+          protocol = "tcp";
+          port = 445;
+        }
+      ];
+      disks = {
+        photos = {
+          source = "/srv/nas-data/photos";
+          path = "/srv/photos";
+        };
+        share = {
+          source = "/srv/nas-data/share";
+          path = "/srv/share";
+        };
       };
     };
   };
